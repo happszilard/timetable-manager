@@ -1,0 +1,107 @@
+body {
+    background-color: rgb(151,137,0);
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+#form {
+    display: block;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 600px;
+    padding-top: 50px;
+    color: white;
+}
+
+form > input, label, div {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#players-info {
+    font-size: 20px;
+}
+
+#robot {
+    margin-left: 100px;
+}
+
+#robot > span {
+    display: block;
+}
+
+#player {
+    margin-right: 100px;
+}
+
+#player > span {
+    display: block;
+}
+
+#player-hand > button {
+    width: 95px;
+    height: 160px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 100px;
+    border-radius: 5px;
+}
+
+#robot-image {
+    height: 160px;
+    width: 95px;
+    margin-left: 100px;
+    border-radius: 5px;
+}
+
+#hands, #players-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+#rock {
+    background-image: url(./rock.png);
+}
+
+#paper {
+    background-image: url(./paper.png);
+}
+
+#scissors {
+    background-image: url(./scissors.png);
+}
+
+#continue {
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: rgb(255, 232, 0);
+    width: 110px;
+    height: 25px;
+    margin-left: 30px;
+}
+
+#who-wins {
+    font-size: 20px;
+}
+
+#game-over {
+    display: block;
+}
+
+#player-hand > button {
+    display: block;
+}
+
+#inform {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}

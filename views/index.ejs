@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <%- include('partials/navbar.ejs') %>
+    </header>
+
+    <main id="main">
+        <h1 >Courses</h1>
+        <div id="container">
+            <% if(courses.length === 0){ %>
+                <div class="course">
+                    No courses available.
+                </div>
+            <% } else {
+            courses.forEach((course)=> { %>
+                <div class="wrapper">
+                    <a href="./course_details/<%= course.courseNumID %>" class="courseName"><%= course.name %></a>
+                    <% if (locals.payload.username) { %>
+                        <a href="#" class="coursecode" onclick="loadMaterials(<%= course.courseNumID %>)">ID: <%= course.courseID %></a>
+                    <% } else { %>
+                        <a href="#" class="coursecode" >ID: <%= course.courseID %></a>
+                    <% } %>
+                    <span class="courseinfo">Class: <%= course.class %></span>
+                    <span class="courseinfo">Lectures: <%= course.lecture %></span>
+                    <span class="courseinfo">Seminars: <%= course.seminar %></span>
+                    <span class="courseinfo">Labs: <%= course.lab %></span>
+                    <div id="materialID<%= course.courseNumID %>" class="materials"></div>
+                </div>
+            <% })} %>
+        </div>
+        <% if(error){ %>
+            <div class="error">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success){ %>
+            <div class="success">
+                <%= success %>
+            </div>
+        <% } %>
+    </main>
+    <script src="/courses.js"></script>
+</body>
+</html>

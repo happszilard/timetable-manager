@@ -1,0 +1,519 @@
+body {
+    background-color: rgb(187, 223, 240);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+nav a {
+    margin-right: 10px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px;
+    border-radius: 5px;
+    text-decoration: solid;
+}
+
+a.linkstyle:visited {
+    color: rgb(255, 255, 255);
+}
+
+a.linkstyle:link {
+    color: rgb(255, 255, 255);
+}
+
+a.linkstyle:hover {
+    color: rgb(0, 0, 0);
+    background-color: rgb(187, 223, 240);
+}
+
+a.linkstyle:active {
+    color: white;
+}
+
+.courseName:hover {
+    color: rgb(187, 223, 240);;
+}
+
+.courseName:active {
+    color: black;
+}
+
+.coursecode:hover {
+    color: black;
+}
+
+.coursecode:active {
+    color: rgb(187, 223, 240);;
+}
+
+nav {
+    background-color: rgb(10, 168, 168);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin: -8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#nav1 {
+    width: 100%;
+    text-decoration: initial;
+    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#nav2 {
+    display: flex;
+}
+
+#navusername {
+    margin-right: 20px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    padding: 5px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+input{
+    margin: 5px;
+    padding: 3px;
+}
+
+form {
+    border-width: 3px;
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    border-radius: 5px;
+    border-color: white;
+    border-style: solid;
+}
+
+.success {
+    border-width: 1px;
+    padding: 5px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: green;
+    border-style: solid;
+    max-width: 200px;
+    width: auto ;
+    height: auto;
+    margin-top: 5px;
+}
+
+.error {
+    border-width: 1px;
+    padding: 5px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: red;
+    border-style: solid;
+    max-width: 250px;
+    width: auto ;
+    height: auto;
+    margin-top: 5px;
+}
+
+#container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.course {
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    background-color: rgb(10, 168, 168);
+    border-color: white;
+    color: white;
+    display: inline-block;
+    padding: 30px;
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+    line-height: 30px;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+}
+
+.courseName {
+    display: inline-block;
+    width: 200px;
+    color: black;
+    text-align: center;
+    font-size: 25px;
+    height: 50px;
+    text-decoration: initial;
+}
+
+.courseinfo {
+    display: inline-block;
+    width: 200px;
+}
+
+.wrapper {
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    background-color: rgb(10, 168, 168);
+    border-color: white;
+    color: white;
+    display: inline-block;
+    padding: 20px;
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+    line-height: 30px;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+    overflow: auto;
+}
+
+.courseDetails {
+    border-width: 3px;
+    padding: 10px;
+    border-radius: 5px;
+    border-radius: 5px;
+    border-color: white;
+    border-style: solid;
+    width: 50% ;
+    height: auto;
+}
+
+.detailitem {
+    line-height: 35px;
+    font-size: 20px;
+}
+
+.uploadform {
+    margin-top: 50px;
+    border-width: 3px;
+}
+
+.detailheader {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.material {
+    background-color: white;
+    border-width: 1px;
+    border-radius: 5px;
+    border-radius: 5px;
+    border-color: black;
+    border-style: solid;
+    display: block;
+    line-height: 25px;
+    padding: 3px;
+    margin: 2px;
+    text-decoration: none;
+    color: black;
+}
+
+.material:hover {
+    background-color: rgb(187, 223, 240);
+}
+
+.material:active {
+    background-color: white;
+}
+
+.materialdetails {
+    background-color: white;
+    border-radius: 5px 0px 0px 5px;
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    padding: 5px;
+    width: 100%;
+}
+
+.materialdetails:hover {
+    background-color: rgb(10, 168, 168);
+    color: white;
+}
+
+.materialdetails:active {
+    color: black;
+    background-color: white;
+}
+
+.deletebtn {
+    background-color: white;
+    padding: 5px;
+    border-radius: 0px 5px 5px 0px;
+    margin: 0px;
+    text-decoration: initial;
+    color: black;
+    flex-grow: 1;
+}
+
+.deletebtn:hover {
+    background-color: red;
+    color: white;
+}
+
+.deletebtn:active {
+    color: black;
+}
+
+.materialdeletebutton {
+    display: flex;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    justify-content: space-between;
+    background-color: white;
+    width: 50%;
+    margin-bottom: 5px;
+}
+
+.coursecode {
+    display: inline-block;
+    width: 200px;
+    text-decoration: initial;
+    color: white;
+}
+
+.tablehours {
+    border-right: solid;
+    height: 70px;
+    width: 40px;
+}
+
+.tabledays {
+    border-bottom: solid;
+    height: 50px;
+    width: 120px;
+    font-size: 20px;
+}
+
+.tabledata {
+    height: 70px;
+    text-align: center;
+}
+
+.userdeletebutton {
+    display: flex;
+    border-radius: 5px;
+    border-style: hidden;
+    border-color: black;
+    border-width: 1px;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.userinfo {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.infoitem {
+    margin: 5px;
+}
+
+.infoitemname {
+    font-weight: bold;
+    margin: 10px;
+}
+
+.allowbtn {
+    background-color: white;
+    padding: 5px;
+    border-radius: 0px 5px 0px 0px;
+    margin: 0px;
+    text-decoration: initial;
+    color: black;
+    flex-grow: 1;
+}
+
+.allowbtn:hover, .allowbtnsuggest:hover {
+    background-color: green;
+    color: white;
+}
+
+.allowbtn:active, .allowbtnsuggest:active {
+    color: black;
+}
+
+.blockbtn {
+    background-color: white;
+    padding: 5px;
+    border-radius: 0px 5px 0px 0px;
+    margin: 0px;
+    text-decoration: initial;
+    color: black;
+    flex-grow: 1;
+}
+
+.blockbtn:hover {
+    background-color: orangered;
+    color: white;
+}
+
+.blockbtn:active {
+    color: black;
+}
+
+.delbtn {
+    background-color: white;
+    padding: 5px;
+    border-radius: 0px 0px 5px 0px;
+    margin: 0px;
+    text-decoration: initial;
+    color: black;
+    flex-grow: 1;
+}
+
+.delbtn:hover, .delbtnsuggest:hover {
+    background-color: red;
+    color: white;
+}
+
+.delbtn:active, .delbtnsuggest:active {
+    color: black;
+}
+
+.buttons {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.buttons a {
+    text-align: center;
+    padding: auto;
+}
+
+.deletebtncourse {
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+    text-decoration: initial;
+    color: black;
+}
+
+.deletediv {
+    margin-top: 20px;
+}
+
+.deletebtncourse:hover {
+    background-color: red;
+    color: white;
+}
+
+.deletebtncourse:active {
+    color: black;
+}
+
+.userSuggestwrapper {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    width: 50%;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.suggestionelement {
+    display: flex;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    justify-content: space-between;
+    background-color: rgb(224, 228, 230);
+    margin: 10px;
+    align-items: center;
+}
+
+.suggestbuttons {
+    display: flex;
+}
+
+.allowbtnsuggest {
+    background-color: rgb(224, 228, 230);
+    margin: 0px;
+    padding: 5px;
+    text-decoration: initial;
+    color: black;
+}
+
+.delbtnsuggest {
+    background-color: rgb(224, 228, 230);
+    border-radius: 0px 5px 5px 0px;
+    margin: 0px;
+    padding: 5px;
+    text-decoration: initial;
+    color: black;
+}
+
+.mysuggestwrapper {
+    background-color: rgb(224, 228, 230);
+    border-radius: 5px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    margin: 10px;
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mysuggestinfo {
+    padding: 5px;
+}
+
+.suggestionform {
+    width: 50%;
+}
+
+.suggestionform div, label {
+    margin: 10px;
+}
+
+.centercalendar {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    text-align: center;
+}
+
+.appendform {
+    padding: 10px;
+}
+
+.appendform div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.displaycourse {
+    padding: 3px;
+    border-radius: 5px;
+}
+
+#userimage {
+    width: 30px;
+}

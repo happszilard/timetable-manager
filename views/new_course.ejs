@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Course</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <%- include('partials/navbar.ejs') %>
+    </header>
+
+    <main class="center">
+        <h1 >Add a course</h1>
+        <form method="POST" action="/newCourse" class="suggestionform">
+
+            <div>
+                <label for="courseID">Course ID: </label> 
+                <input id="courseID" type="text" name="courseID" placeholder="Course ID" required>
+            </div>
+            
+            <div>
+                <label for="name">Course name: </label> 
+                <input id="name" type="text" name="name" placeholder="Course Name" required>
+            </div>
+
+            <div>
+                <label for="class">Class: </label>
+                <input id="class" type="number" name="class" min="1" required>
+            </div>
+            
+            <div>
+                <label for="lecture">Lecture hours: </label>
+                <input id="lecture" type="number" name="lecture" min="0" required>
+            </div>
+            
+            <div>
+                <label for="seminar">Seminar hours: </label>
+                <input id="seminar" type="number" name="seminar" min="0" required>
+            </div>
+
+            <div>
+                <label for="lab">Laboratory hours: </label>
+                <input id="lab" type="number" name="lab" min="0" required>
+            </div>
+
+            <div>
+                <label for="color">Color: </label>
+                <input id="color" type="color" name="color" required>
+            </div>
+            
+            <input type="submit" value="Submit">
+        </form>
+        <% if(message){ %>
+            <div class="error center">
+                <%= message %>
+            </div>
+        <% } %>
+    </main>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintain courses</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <%- include('partials/navbar.ejs') %>
+    </header>
+
+    <main class="center">
+        <h1 >Set the schedule of a course</h1>
+        <form method="POST" action="/maintain_courses" class="suggestionform">
+
+            <div>
+                <label for="courseselect">Course: </label>
+                <% if (courses.length === 0) { %>
+                    <div>
+                        No available courses.
+                    </div>
+                <% } else { %>
+                    <select id="courseselect" name="courseselect">
+                    <% courses.forEach((course)=> { %>
+                        <option value="<%= course.courseNumID %>"><%= course.name %></option>
+                    <% })%> 
+                    </select>
+                <% } %>
+            </div>
+
+            <div>
+                <label for="dayselect">Day: </label>
+                <% if (days.length === 0) { %>
+                    <div>
+                        No available days.
+                    </div>
+                <% } else { %>
+                    <select id="dayselect" name="dayselect">
+                    <% days.forEach((day)=> { %>
+                        <option value="<%= day.dayID %>"><%= day.name %></option>
+                    <% })%> 
+                    </select>
+                <% } %>
+            </div>
+
+            <div>
+                <label for="hourselect">Time: </label>
+                <% if (hours.length === 0) { %>
+                    <div>
+                        No available hours.
+                    </div>
+                <% } else { %>
+                    <select id="hourselect" name="hourselect">
+                    <% hours.forEach((hour)=> { %>
+                        <option value="<%= hour.timeID %>"><%= hour.repr %></option>
+                    <% })%> 
+                    </select>
+                <% } %>
+            </div>
+
+            <div>
+                <div id="insertdiv">
+                    <input type="radio" id="insrt" name="insertCourse" value="insert" checked>
+                    <label for="insrt">Insert</label>
+                </div>
+                
+                <div id="removediv">
+                    <input type="radio" id="remove" name="insertCourse" value="remove">
+                    <label for="remove">Remove</label>
+                </div>
+            </div>
+            
+            <input type="submit" value="Submit">
+        </form>
+        <% if(error){ %>
+            <div class="error center">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success){ %>
+            <div class="success center">
+                <%= success %>
+            </div>
+        <% } %>
+    </main>
+</body>
+</html>

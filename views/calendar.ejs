@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <%- include('partials/navbar.ejs') %>
+    </header>
+
+    <main class="centercalendar">
+        <h1 class="center">Schedule</h1>
+
+        <table CELLSPACING=0 class="centercalendar">
+            <tr>
+                <th class="tablehours tabledays"></th>
+                <% days.forEach(day => { %>
+                <th class="tabledays"><%= day.name %></th>
+                <% }) %>
+            </tr>
+            
+            <% hours.forEach(hour => { %>
+                <tr>
+                    <td class="tablehours"><%= hour.repr %></td>
+                    <% days.forEach(day => { %>
+                        <% if (calendar[hour.timeID - 1][day.dayID - 1]) { %>
+                            <% if (calendar[hour.timeID - 1][day.dayID - 1].name) { %>
+                                <td class="tabledata" style="background-color: <%= calendar[hour.timeID - 1][day.dayID - 1].color %>; "><%= calendar[hour.timeID - 1][day.dayID - 1].name %></td>
+                            <% } else { %>
+                                <td class="tabledata" style="color: red; background-color: white; font-weight: bold;">Occupied</td>
+                            <% } %>
+                        <% } else { %>
+                            <td class="tabledata"></td>
+                        <% } %>
+                    <% }) %>
+                </tr>
+            <% }) %>
+            
+        </table>
+         
+    </main>
+</body>
+</html>

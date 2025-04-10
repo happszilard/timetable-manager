@@ -1,0 +1,25 @@
+<div id="navbar">
+    <nav>
+        <div id="nav1">
+            <a class="linkstyle" href="/">Home</a>
+        <% if (locals.payload.username && locals.payload.userType === 0) { %>
+            <a class="linkstyle" href="/new_course">Add course</a>
+            <a class="linkstyle" href="/teachers">Teachers</a>
+            <a class="linkstyle" href="/maintain_courses">Maintain</a>
+            <a class="linkstyle" href="/calendar">Schedule</a>
+        <% } else if (locals.payload.username && locals.payload.userType === 1) { %>
+            <a class="linkstyle" href="/suggest">Suggest</a>
+            <a class="linkstyle" href="/calendar">Calendar</a>
+        <% } %> 
+        </div>
+        <div id="nav2">
+        <% if (locals.payload.username) { %>
+            <img id="userimage" src="/images/user1.png" alt="user image">
+            <span id="navusername"><%= locals.payload.username %></span>
+            <a class="linkstyle" href="/auth/logout">Logout</a>
+        <% } else { %>
+            <a class="linkstyle" href="/auth/login">Login</a>
+        <% } %> 
+        </div>
+    </nav>
+</div>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <%- include('partials/navbar.ejs') %>
+    </header>
+
+    <main id="main">
+        <h1 >Teachers</h1>
+
+        <div id="userwrapper">
+            <% if(users.length === 0){ %>
+                <div class="user">
+                    There are no Teachers.
+                </div>
+            <% } else { %>
+                <% users.forEach((user)=> { %>
+                <% if (user.userType === 1) { %>
+                    <div class="userSuggestwrapper">
+                        <div class="userdeletebutton">
+                            <div class="userinfo">
+                                <div class="infoitemname"><%= user.firstName %> <%= user.lastName %></div>
+                                <div class="infoitem"><%= user.username %></div>
+                                <div class="infoitem">
+                                    Courses:
+                                    <% members.forEach(member => { %>
+                                        <% if (member.userNumID === user.userNumID) { %>
+                                            <span class="displaycourse" style="background-color: <%= member.color %>;"><%= member.name %></span>
+                                        <% } %>
+                                    <% }) %>
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <% if (user.allowed === 0) { %>
+                                    <a href="#"  onclick="allowUser(<%= user.userNumID %>)" class="allowbtn" id="allowbtn<%= user.userNumID %>">Allow</a>
+                                    <a href="#" style="display: none;" onclick="blockUser(<%= user.userNumID %>)" class="blockbtn" id="blockbtn<%= user.userNumID %>">Block</a>
+                                <% } else { %>
+                                    <a href="#" style="display: none;" onclick="allowUser(<%= user.userNumID %>)" class="allowbtn" id="allowbtn<%= user.userNumID %>">Allow</a>
+                                    <a href="#" onclick="blockUser(<%= user.userNumID %>)" class="blockbtn" id="blockbtn<%= user.userNumID %>">Block</a>
+                                <% } %>
+                                <a href="#" onclick="deleteUser(event, <%= user.userNumID %>)" class="delbtn" id="delbtn<%= user.userNumID %>">Delete</a>
+                            </div>
+                        </div>
+                        <% if (suggestions.length !== 0) { %>
+                            <% suggestions.forEach(suggestion => { %>
+                                <% if (suggestion.userNumID === user.userNumID) { %>
+                                    <div class="suggestionelement">
+                                        <div class="suggestinfo">
+                                            <% if (suggestion.isInsert == 1) { %>
+                                                Insert
+                                            <% } else { %>
+                                                Remove
+                                            <% } %>
+                                            <b><%= suggestion.coursename %></b>
+                                            at
+                                            <%= suggestion.dayname %>
+                                            ,
+                                            <%= suggestion.hourname %>
+                                        </div>
+                                        <div class="suggestbuttons">
+                                            <a href="#" class="allowbtnsuggest" onclick="acceptSuggestion(event, <%= suggestion.suggestionID %>)" id="allowbtn<%= user.userNumID %>">Accept</a>
+                                            <a href="#" onclick="rejectSuggestion(event, <%= suggestion.suggestionID %>)" class="delbtnsuggest" id="delbtn<%= user.userNumID %>">Reject</a>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% })} %>
+        </div>
+        <h2>Append teachers to the courses</h2>
+        <form method="POST" action="/teachers" class="appendform">
+
+            <div>
+                <label for="courseselect">Course: </label>
+                <% if (courses.length === 0) { %>
+                    <div>
+                        No available courses.
+                    </div>
+                <% } else { %>
+                    <select id="courseselect" name="courseselect" onchange="editButtons()">
+                    <% courses.forEach((course)=> { %>
+                        <option value="<%= course.courseNumID %>"><%= course.name %></option>
+                    <% })%> 
+                    </select>
+                    <% } %>
+            </div>
+
+            <div>
+                <label for="userselect">User: </label>
+                <% if (users.length === 0) { %>
+                    <div>
+                        No available users.
+                    </div>
+                <% } else { %>
+                    <select id="userselect" name="userselect" onchange="editButtons()">
+                    <% users.forEach((user)=> { %>
+                        <% if (user.userType === 1) { %>
+                            <option value="<%= user.userNumID %>"><%= user.firstName %> <%= user.lastName %></option>
+                        <% } %> 
+                    <% })%> 
+                    </select>
+                    <% } %>
+            </div>
+
+            <div id="radiodiv">
+                <div id="joindiv">
+                    <input type="radio" id="join" name="joinCourse" value="join">
+                    <label for="join">Append to course</label>
+                </div>
+                
+                <div id="leavediv">
+                    <input type="radio" id="leave" name="joinCourse" value="leave">
+                    <label for="leave">Remove from course</label>
+                </div>
+            </div>
+            
+            <input type="submit" value="OK!">
+        </form>
+        <% if(error){ %>
+            <div class="error">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success){ %>
+            <div class="success">
+                <%= success %>
+            </div>
+        <% } %>
+    </main>
+    <script src="/teachers.js"></script>
+</body>
+</html>

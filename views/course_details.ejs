@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <%- include('partials/navbar.ejs') %>
+    </header>
+
+    <main id="main">
+        <h1 ><%= course.name %> </h1>
+        <h2>Details</h2>
+        <div class="courseDetails">
+            <div class="detailitem"><span class="detailheader">Course ID: </span><%= course.courseID %></div>
+            <div class="detailitem"><span class="detailheader">Class: </span><%= course.class %></div>
+            <div class="detailitem"><span class="detailheader">Number of lectures: </span><%= course.lecture %></div>
+            <div class="detailitem"><span class="detailheader">Number of seminars: </span><%= course.seminar %></div>
+            <div class="detailitem"><span class="detailheader">Number of labs: </span><%= course.lab %></div>
+        </div>
+        <% if (locals.payload.userType === 0) { %>
+            <div class="deletediv">
+                <a href="/delete_course/<%= course.courseNumID %>" class="deletebtncourse">Delete course</a>
+            </div>
+        <% } %> 
+        <h2>Course materials</h2>
+        <div id="materialwrapper">
+            <% if(materials.length === 0){ %>
+                <div class="materialdeletebutton">
+                    There are no materials.
+                </div>
+            <% } else { %>
+                <% materials.forEach((material)=> { %>
+                <div class="materialdeletebutton">
+                    <a href="download/<%= material.materialID %>" class="materialdetails"><%= material.name %></a>
+                    <a href="#" onclick="deleteMaterial(event, <%= material.materialID %>)" class="deletebtn">Delete</a>
+                </div>
+                <% })} %>
+        </div>
+        
+        <form class="uploadform footer" method="POST" action="/course_details/<%= course.courseNumID %> " enctype="multipart/form-data">
+            
+            <label>Upload course materials </label> 
+            
+            <div>
+                <label for="courseFile">Select a file:</label>
+                <input type="file" id="courseFile" name="courseFile">
+            </div>
+            
+            <input type="submit" value="Submit">
+        </form>
+       
+        <% if(error){ %>
+            <div class="error">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success){ %>
+            <div class="success">
+                <%= success %>
+            </div>
+        <% } %>
+    </main>
+    <script src="/delete_material.js"></script>
+</body>
+</html>

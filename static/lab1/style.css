@@ -1,0 +1,177 @@
+/* A HTML törzsében legyen (a szöveggel együtt gördülő) háttérkép (lehetőleg ne legyen túl sötét kép),      1
+mely csak az y tengely mentén ismétlődik. */
+body {
+    background-image: url(./images/all/background_4.jpg);
+    background-repeat: repeat-y;
+    background-size: 100vmax;
+}
+
+/* Elemre vonatkozó szelektorok (osztály/ID nélkül) segítségével oldjuk meg, hogy az em és p elemek         2
+színe, háttérszíne és szövegdíszítése (text-decoration) legyen egyforma. */
+em, p {
+    color: rgb(128, 24, 20);
+    background-color: rgb(196, 193, 189);
+    text-decoration: solid;
+    font-size: 120%;
+}
+
+/* Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú (sorszám nélküli) listát.             3
+Használjunk csak az illető elemre vonatkozó stílusosztályokat (class). */
+ul.style1 {
+    font-size: 20px;
+    font-style: italic;
+}
+
+ul.style2 {
+    font-size: 17px;
+    color: rgb(51, 2, 2);
+}
+
+/* Általános stílusosztály (osztály, mely nincs ráhúzva egy elemtípusra) segítségével oldjuk meg, hogy      4
+különböző HTML elemek stílusa (betűtípus-család, betű vastagsága, betű stílusa, díszítés) ugyanaz
+legyen. Alkalmazzuk ugyanazt a stílusosztályt a h1 és h2 elemekre. */
+.general {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+/* Adjuk meg (kontextussal megadott szelektort használva) egy section elemben közvetlenül egy h2            5
+elem után elhelyezkedő p elem stílusát (szövegszín, relatív betűméret). */
+section h2+p {
+    color: rgb(41, 2, 2);
+    font-size: 120%;
+}
+
+/* Definiáljunk két különböző hivatkozás (link) típust, melyeknek más és más a színe, szövegdíszítése       6
+ha rámegyünk az egérrel, ha aktív, ha már meglátogattuk. */
+
+
+a.linkstyle1:visited {
+    color: firebrick;
+    text-decoration: solid;
+}
+
+a.linkstyle1:hover {
+    color: darkred;
+    text-decoration: none;
+}
+
+a.linkstyle1:active {
+    color: red;
+    text-decoration: wavy;
+}
+
+a.linkstyle2:visited {
+    color: sienna;
+    text-decoration: solid;
+}
+
+a.linkstyle2:hover {
+    color: saddlebrown;
+    text-decoration: none;
+}
+
+a.linkstyle2:active {
+    color: black;
+    text-decoration: wavy;
+}
+
+
+/* Definiáljunk egy olyan div stílust, mely be van keretezve duplakerettel. A szöveg legyen balra illetve   7
+felfele tolódva a kereten belül (az alsó illetve jobboldali behúzás–padding–nagyobb). */
+div {
+    border-style: double;
+    padding-right: 200px;
+    padding-bottom: 70px;
+}
+
+/* Definiáljunk a táblázat esetén két különböző cella-stílust, melyben a szöveg igazítása más és más (az    8
+első oszlopban az első, a többiben a második legyen érvényes). */
+
+table tr td:first-child,  table tr th:first-child{          
+    text-align: left;
+    color: rgb(63, 23, 4);
+    font-weight: bold;
+}
+
+table td + td, th + th {                                    
+    text-align: justify;
+    color: crimson;
+}
+
+/* Oldjuk meg (táblázat használata nélkül), hogy az oldal egy részén a szöveg két különböző színű,          9
+egymás mellett elhelyezett téglalapban szerepeljen. */
+
+.floating {
+    float: left;
+    width: 45vw;
+    margin: 10px;
+    border-style: none;
+    padding: initial;
+}
+
+/* Kép, melyre rákattintva az illető kép nagyított változatát kapjuk.                                      10*/
+
+#image-link {
+    background-image: url("./images/rules/pieces.jpg");
+    width: 70vw;
+    height: 70vh;
+    display: block;
+}
+
+
+
+/*----------------------------- 
+        more styling... 
+-----------------------------*/
+
+table {
+    border-radius: 2px;
+    border-style: dashed;
+    width: 70%;
+    line-height: 20px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+a {
+    text-decoration: none;
+    font-size: 20px;
+    padding-right: 10px;
+}
+
+#chess-online {
+    border-style: dotted;
+    border-radius: 3px;
+    padding: initial;
+    font-size: 20px;
+    display: inline;
+    width: 30vw;
+    padding: 10px;
+    border-color: orangered;
+}
+
+nav {
+    background-color: rgb(177, 174, 174);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    margin: -8px;
+}
+
+nav a {
+    border: solid;
+    border-width: 1px;
+    border-color: brown;
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 7px;
+}
