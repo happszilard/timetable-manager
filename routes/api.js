@@ -1,6 +1,8 @@
 import express from 'express';
 import { unlink } from 'fs';
 import * as db from '../db/connection.js';
+import { onlyAdmins } from '../middleware/auth.js';
+import * as vd from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -147,6 +149,99 @@ router.delete('/deleteUser/:userNumID', async (req, res) => {
     }
   } catch (err) {
     res.status(500).send({ message: err.message });
+  }
+});
+
+// --------------------- REST API ---------------------
+
+router.get('/admin/courses', onlyAdmins, async (req, res) => {
+  try {
+    const allCourses = await db.getCourses();
+    return res.status(200).json({ success: true, data: allCourses });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Error fetching courses' });
+  }
+});
+
+router.get('/user/courses', async (req, res) => {
+  try {
+    const userCourses = await db.getUserCourses(req.user.userNumID);
+    return res.status(200).json({ success: true, data: userCourses });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Error fetching courses' });
+  }
+});
+
+router.post('/admin/courses', [vd.newCourseIDClassValidation, onlyAdmins,
+  vd.newCourseHoursValidation], async (req, res) => {
+  try {
+    const {
+      courseID, name, year, lecture, seminar, lab, color,
+    } = req.body;
+    console.log(req.body);
+    const result = await db.insertCourse({
+      courseID,
+      name,
+      year,
+      lecture,
+      seminar,
+      lab,
+      userNumID: req.user.userNumID,
+      color,
+    });
+    console.log(result);
+
+    if (!result || !result.insertId) {
+      return res.status(400).json({ success: false, message: 'Error creating course' });
+    }
+
+    const newCourse = {
+      courseNumID: result.insertId,
+      courseID,
+      name,
+      year,
+      lecture,
+      seminar,
+      lab,
+      color,
+      userNumID: req.user.userNumID,
+    };
+
+    return res.status(201).json({ success: true, data: newCourse });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Error creating course' });
+  }
+});
+
+router.delete('/admin/courses/:courseNumID', onlyAdmins, async (req, res) => {
+  const { courseNumID } = req.params;
+  try {
+    const deletedCourse = await db.deleteCourse(courseNumID);
+
+    if (deletedCourse.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+    return res.status(200).json({ success: true, data: null });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Error deleting course' });
+  }
+});
+
+router.get('/courses/:courseNumID', async (req, res) => {
+  try {
+    const userMember = await db.findUserMember({
+      course: req.params.courseNumID,
+      user: req.user.userNumID,
+    });
+
+    if (userMember.length === 0 && req.user.userType !== 0) {
+      return res.status(401).json({ success: false, message: 'Access denied. You are not assigned to this course' });
+    }
+    const [course, materials] = await Promise.all([db.getCourseByNumID(req.params.courseNumID),
+      db.getMaterials(req.params.courseNumID)]);
+    return res.status(200).json({ success: true, data: { course, materials } });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Error fetching courses' });
   }
 });
 

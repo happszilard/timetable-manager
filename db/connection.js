@@ -1,13 +1,13 @@
-import util from "util";
-import mysql from "mysql";
+import util from 'util';
+import mysql from 'mysql';
 
 const connectionPool = mysql.createPool({
   connectionLimit: 10,
-  database: "timetable",
-  host: "localhost",
+  database: 'timetable',
+  host: 'localhost',
   port: 3306,
-  user: "web",
-  password: "mypwd123",
+  user: 'myuser',
+  password: 'mypwd123',
 });
 
 const basicQuery = util.promisify(connectionPool.query).bind(connectionPool);
@@ -27,7 +27,7 @@ export const createTableCourses = async () => {
       FOREIGN KEY (userNumID) REFERENCES users(userNumID)
       );
     `);
-    console.log("Table courses created successfully");
+    console.log('Table courses created successfully');
   } catch (err) {
     console.error(`Create table courses error: ${err}`);
     process.exit(1);
@@ -47,7 +47,7 @@ export const createTableUsers = async () => {
       allowed INT
       );
     `);
-    console.log("Table users created successfully");
+    console.log('Table users created successfully');
   } catch (err) {
     console.error(`Create table users error: ${err}`);
     process.exit(1);
@@ -64,7 +64,7 @@ export const createTableMembers = async () => {
       FOREIGN KEY (userNumID) REFERENCES Users(userNumID)
       );
     `);
-    console.log("Table members created successfully");
+    console.log('Table members created successfully');
   } catch (err) {
     console.error(`Create table members error: ${err}`);
     process.exit(1);
@@ -80,7 +80,7 @@ export const createTableMaterials = async () => {
       pathName VARCHAR(255)
       );
     `);
-    console.log("Table materials created successfully");
+    console.log('Table materials created successfully');
   } catch (err) {
     console.error(`Create table materials error: ${err}`);
     process.exit(1);
@@ -97,7 +97,7 @@ export const createTableCourseMaterials = async () => {
       FOREIGN KEY (materialID) REFERENCES Materials(materialID)
       );
     `);
-    console.log("Table coursematerials created successfully");
+    console.log('Table coursematerials created successfully');
   } catch (err) {
     console.error(`Create table coursematerials error: ${err}`);
     process.exit(1);
@@ -111,9 +111,26 @@ export const createTableHours = async () => {
       repr VARCHAR(127)
       );
     `);
-    console.log("Table hours created successfully");
+    console.log('Table hours created successfully');
   } catch (err) {
     console.error(`Create table hours error: ${err}`);
+    process.exit(1);
+  }
+};
+
+export const populateTableHours = async () => {
+  try {
+    await basicQuery(`INSERT INTO hours (repr) VALUES
+      ('08:00-10:00'),
+      ('10:00-12:00'),
+      ('12:00-14:00'),
+      ('14:00-16:00'),
+      ('16:00-18:00'),
+      ('18:00-20:00')
+    `);
+    console.log('Table hours populated successfully');
+  } catch (err) {
+    console.error(`Populate table hours error: ${err}`);
     process.exit(1);
   }
 };
@@ -125,9 +142,27 @@ export const createTableDays = async () => {
       name VARCHAR(127)
       );
     `);
-    console.log("Table days created successfully");
+    console.log('Table days created successfully');
   } catch (err) {
     console.error(`Create table days error: ${err}`);
+    process.exit(1);
+  }
+};
+
+export const populateTableDays = async () => {
+  try {
+    await basicQuery(`INSERT INTO days (name) VALUES
+      ('Monday'),
+      ('Tuesday'),
+      ('Wednesday'),
+      ('Thursday'),
+      ('Friday'),
+      ('Saturday'),
+      ('Sunday')
+    `);
+    console.log('Table days populated successfully');
+  } catch (err) {
+    console.error(`Populate table days error: ${err}`);
     process.exit(1);
   }
 };
@@ -144,7 +179,7 @@ export const createTableCalendar = async () => {
       FOREIGN KEY (dayID) REFERENCES days(dayID)
       );
     `);
-    console.log("Table calendar created successfully");
+    console.log('Table calendar created successfully');
   } catch (err) {
     console.error(`Create table calendar error: ${err}`);
     process.exit(1);
@@ -166,7 +201,7 @@ export const createTableSuggestions = async () => {
       FOREIGN KEY (dayID) REFERENCES days(dayID)
       );
     `);
-    console.log("Table suggestions created successfully");
+    console.log('Table suggestions created successfully');
   } catch (err) {
     console.error(`Create table suggestions error: ${err}`);
     process.exit(1);
@@ -174,7 +209,7 @@ export const createTableSuggestions = async () => {
 };
 
 export const getCourses = () => {
-  const query = "SELECT * FROM courses";
+  const query = 'SELECT * FROM courses';
   return basicQuery(query);
 };
 
@@ -185,27 +220,27 @@ export const getUserCourses = (params) => {
 };
 
 export const getDays = () => {
-  const query = "SELECT * FROM days";
+  const query = 'SELECT * FROM days';
   return basicQuery(query);
 };
 
 export const getHours = () => {
-  const query = "SELECT * FROM hours";
+  const query = 'SELECT * FROM hours';
   return basicQuery(query);
 };
 
 export const getCourse = (params) => {
-  const query = "SELECT * FROM courses WHERE courseID = ?";
+  const query = 'SELECT * FROM courses WHERE courseID = ?';
   return basicQuery(query, [params]).then((course) => course[0]);
 };
 
 export const getCourseByNumID = (params) => {
-  const query = "SELECT * FROM courses WHERE courseNumID = ?";
+  const query = 'SELECT * FROM courses WHERE courseNumID = ?';
   return basicQuery(query, [params]).then((course) => course[0]);
 };
 
 export const getUsers = () => {
-  const query = "SELECT * FROM users";
+  const query = 'SELECT * FROM users';
   return basicQuery(query);
 };
 
@@ -213,14 +248,14 @@ export const insertCourse = (params) => {
   const query = `INSERT INTO courses (courseID, name, class, lecture, seminar, lab, userNumID, color)
   VALUES (?,?,?,?,?,?,?,?);`;
   return basicQuery(query, [
-    params.req.body.courseID,
-    params.req.body.name,
-    params.req.body.class,
-    params.req.body.lecture,
-    params.req.body.seminar,
-    params.req.body.lab,
-    params.res.locals.payload.userNumID,
-    params.req.body.color,
+    params.courseID,
+    params.name,
+    params.year,
+    params.lecture,
+    params.seminar,
+    params.lab,
+    params.userNumID,
+    params.color,
   ]);
 };
 
@@ -231,24 +266,21 @@ export const insertCalendar = (params) => {
 };
 
 export const findCalendarElement = (params) => {
-  const query =
-    "SELECT calendarID FROM calendar WHERE dayID = ? AND timeID = ?";
+  const query =    'SELECT calendarID FROM calendar WHERE dayID = ? AND timeID = ?';
   return basicQuery(query, [params.dayID, params.timeID]).then(
-    (calendar) => calendar[0]
+    (calendar) => calendar[0],
   );
 };
 
 export const getCalendarCourseNumID = (params) => {
-  const query =
-    "SELECT courseNumID FROM calendar WHERE dayID = ? AND timeID = ?";
+  const query =    'SELECT courseNumID FROM calendar WHERE dayID = ? AND timeID = ?';
   return basicQuery(query, [params.dayID, params.timeID]).then(
-    (calendar) => calendar[0]
+    (calendar) => calendar[0],
   );
 };
 
 export const getCalendar = () => {
-  const query =
-    "SELECT courses.name, courses.color, dayID, timeID FROM calendar join courses on calendar.courseNumID = courses.courseNumID";
+  const query =    'SELECT courses.name, courses.color, dayID, timeID FROM calendar join courses on calendar.courseNumID = courses.courseNumID';
   return basicQuery(query);
 };
 
@@ -259,68 +291,67 @@ export const getUserCalendar = (params) => {
 };
 
 export const findCourseById = (params) => {
-  const query = "SELECT courseID FROM courses WHERE courseID = ?";
+  const query = 'SELECT courseID FROM courses WHERE courseID = ?';
   return basicQuery(query, [params]);
 };
 
 export const findCourseByNumId = (params) => {
-  const query = "SELECT courseID FROM courses WHERE courseNumID = ?";
+  const query = 'SELECT courseID FROM courses WHERE courseNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const findHourByID = (params) => {
-  const query = "SELECT timeID FROM hours WHERE timeID = ?";
+  const query = 'SELECT timeID FROM hours WHERE timeID = ?';
   return basicQuery(query, [params]);
 };
 
 export const findDayByID = (params) => {
-  const query = "SELECT dayID FROM days WHERE dayID = ?";
+  const query = 'SELECT dayID FROM days WHERE dayID = ?';
   return basicQuery(query, [params]);
 };
 
 export const findUserById = (params) => {
-  const query = "SELECT userID FROM users WHERE userID = ?";
+  const query = 'SELECT userID FROM users WHERE userID = ?';
   return basicQuery(query, [params]);
 };
 
 export const findUserByNumID = (params) => {
-  const query = "SELECT userNumID FROM users WHERE userNumID = ?";
+  const query = 'SELECT userNumID FROM users WHERE userNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const findUserMember = (params) => {
-  const query =
-    "SELECT userNumID FROM members WHERE courseNumID = ? AND userNumID = ?";
+  const query =    'SELECT userNumID FROM members WHERE courseNumID = ? AND userNumID = ?';
   return basicQuery(query, [params.course, params.user]);
 };
 
 export const insertUserMember = (params) => {
-  const query = "INSERT INTO members VALUES (?, ?);";
+  const query = 'INSERT INTO members VALUES (?, ?);';
   return basicQuery(query, [params.course, params.user]);
 };
 
 export const deleteUserMember = (params) => {
-  const query = "DELETE FROM members WHERE courseNumID = ? AND userNumID = ?";
+  const query = 'DELETE FROM members WHERE courseNumID = ? AND userNumID = ?';
   return basicQuery(query, [params.course, params.user]);
 };
 
 export const deleteUserMemberAll = (params) => {
-  const query = "DELETE FROM members WHERE userNumID = ?";
+  const query = 'DELETE FROM members WHERE userNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const deleteUser = (params) => {
-  const query = "DELETE FROM users WHERE userNumID = ?";
+  const query = 'DELETE FROM users WHERE userNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const setUserBlocked = (params) => {
-  const query = "UPDATE users SET allowed = 0 WHERE userNumID = ?";
+  const query = 'UPDATE users SET allowed = 0 WHERE userNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const setUserAllowed = (params) => {
-  const query = "UPDATE users SET allowed = 1 WHERE userNumID = ?";
+  const query = 'UPDATE users SET allowed = 1 WHERE userNumID = ?';
   return basicQuery(query, [params]);
 };
 
@@ -331,63 +362,62 @@ export const getMaterials = (params) => {
 };
 
 export const deleteMaterial = (params) => {
-  const query = "DELETE FROM materials WHERE materialID = ?";
+  const query = 'DELETE FROM materials WHERE materialID = ?';
   return basicQuery(query, [params]);
 };
 
 export const deleteCourseMaterial = (params) => {
-  const query = "DELETE FROM coursematerials WHERE materialID = ?";
+  const query = 'DELETE FROM coursematerials WHERE materialID = ?';
   return basicQuery(query, [params]);
 };
 
 export const deleteCourseMaterialByCourse = (params) => {
-  const query = "DELETE FROM coursematerials WHERE courseNumID = ?";
+  const query = 'DELETE FROM coursematerials WHERE courseNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const deleteCourseMember = (params) => {
-  const query = "DELETE FROM members WHERE courseNumID = ?";
+  const query = 'DELETE FROM members WHERE courseNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const deleteCourseCalendar = (params) => {
-  const query = "DELETE FROM calendar WHERE courseNumID = ?";
+  const query = 'DELETE FROM calendar WHERE courseNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const deleteCourse = (params) => {
-  const query = "DELETE FROM courses WHERE courseNumID = ?";
+  const query = 'DELETE FROM courses WHERE courseNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const getMaterial = (params) => {
-  const query = "SELECT * FROM materials WHERE materialID = ?";
+  const query = 'SELECT * FROM materials WHERE materialID = ?';
   return basicQuery(query, [params]).then((material) => material[0]);
 };
 
 export const insertMaterial = (params) => {
-  const query = "INSERT INTO materials (name, path, pathName) VALUES (?,?,?);";
+  const query = 'INSERT INTO materials (name, path, pathName) VALUES (?,?,?);';
   return basicQuery(query, [params.name, params.path, params.pathName]);
 };
 
 export const insertCourseMaterial = (params) => {
-  const query = "INSERT INTO coursematerials VALUES (?,?);";
+  const query = 'INSERT INTO coursematerials VALUES (?,?);';
   return basicQuery(query, [params.courseNumID, params.materialID]);
 };
 
 export const getUserByUserName = (params) => {
-  const query = "SELECT * FROM users WHERE username = ?";
+  const query = 'SELECT * FROM users WHERE username = ?';
   return basicQuery(query, [params]).then((user) => user[0]);
 };
 
 export const getUserMembers = () => {
-  const query =
-    "SELECT members.userNumID, courses.name, courses.color from members JOIN courses ON members.courseNumID = courses.courseNumID";
+  const query =    'SELECT members.userNumID, courses.name, courses.color from members JOIN courses ON members.courseNumID = courses.courseNumID';
   return basicQuery(query);
 };
 
 export const getMembers = () => {
-  const query = "SELECT * from members";
+  const query = 'SELECT * from members';
   return basicQuery(query);
 };
 
@@ -411,22 +441,22 @@ export const getSuggestions = () => {
 };
 
 export const deleteSuggestion = (params) => {
-  const query = "DELETE FROM suggestions WHERE suggestionID = ?";
+  const query = 'DELETE FROM suggestions WHERE suggestionID = ?';
   return basicQuery(query, [params]);
 };
 
 export const deleteSuggestionByUser = (params) => {
-  const query = "DELETE FROM suggestions WHERE userNumID = ?";
+  const query = 'DELETE FROM suggestions WHERE userNumID = ?';
   return basicQuery(query, [params]);
 };
 
 export const getSuggestionByID = (params) => {
-  const query = "SELECT * FROM suggestions WHERE suggestionID = ?";
+  const query = 'SELECT * FROM suggestions WHERE suggestionID = ?';
   return basicQuery(query, [params]).then((suggestions) => suggestions[0]);
 };
 
 export const deleteCalendarElement = (params) => {
-  const query = "DELETE FROM calendar WHERE calendarID = ?";
+  const query = 'DELETE FROM calendar WHERE calendarID = ?';
   return basicQuery(query, [params]);
 };
 

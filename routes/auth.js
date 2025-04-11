@@ -18,15 +18,17 @@ const pbkdf2 = promisify(crypto.pbkdf2);
 router.post('/login', async (req, res) => {
   const { password } = req.body;
   const { username } = req.body;
+
   const user = await db.getUserByUserName(username);
   if (!user) {
-    return res.render('login', { error: 'No such user' });
+    return res.status(401).json({ success: false, message: 'Invalid credentials' });
   }
   const hashWithSalt = user.password;
   const expectedHash = hashWithSalt.substring(0, hashSize * 2),
     salt = Buffer.from(hashWithSalt.substring(hashSize * 2), 'hex');
   const binaryHash = await pbkdf2(password, salt, iterations, hashSize, hashAlgorithm);
   const actualHash = binaryHash.toString('hex');
+
   if (expectedHash === actualHash && user.allowed === 1) {
     const token = jwt.sign({
       username,
@@ -34,28 +36,29 @@ router.post('/login', async (req, res) => {
       userID: user.userID,
       userType: user.userType,
       userAllowed: user.allowed,
-    }, secret);
+    }, secret, {
+      expiresIn: '1h',
+    });
 
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
     });
 
-    return res.redirect('/');
+    return res.status(200).json({ success: true, data: null });
   }
-  if (expectedHash !== actualHash) {
-    return res.render('login', { error: 'Incorrect password' });
-  }
-  return res.render('login', { error: 'You dont have permission' });
+
+  return res.status(401).json({ success: false, message: 'Invalid credentials' });
 });
 
-router.get('/logout', (req, res) => {
-  res.clearCookie('token');
-  return res.redirect('/');
-});
-
-router.get('/login', (req, res) => {
-  res.render('login', { error: '' });
+router.post('/logout', (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+  });
+  return res.status(200).json({ success: true, data: null });
 });
 
 export default router;

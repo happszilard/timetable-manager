@@ -4,11 +4,17 @@ import * as db from '../db/connection.js';
 export const newCourseIDClassValidation = async (req, res, next) => {
   const id = await db.findCourseById(req.body.courseID);
   if (id.length !== 0) {
-    return res.render('new_course', { message: 'The course with the given ID already exists' });
+    return res.status(400).json({
+      success: false,
+      message: 'Course ID already exists',
+    });
   }
 
-  if (req.body.class < 1 || req.body.class > 6 || !Number.isInteger(parseInt(req.body.class, 10))) {
-    return res.render('new_course', { message: 'Invalid class. The class must be a number between 1 and 6.' });
+  if (req.body.year < 1 || req.body.year > 6 || !Number.isInteger(parseInt(req.body.year, 10))) {
+    return res.status(400).json({
+      success: false,
+      message: 'The year must be a number between 1 and 6',
+    });
   }
 
   return next();
@@ -17,15 +23,24 @@ export const newCourseIDClassValidation = async (req, res, next) => {
 // Course validation - valid lecture, seminar and lab hours
 export const newCourseHoursValidation = (req, res, next) => {
   if (req.body.lecture < 0 || !Number.isInteger(parseInt(req.body.lecture, 10))) {
-    return res.render('new_course', { message: 'Invalid lecture. The hours of lectures must be a pozitive number.' });
+    return res.status(400).json({
+      success: false,
+      message: 'The hours of lectures must be a pozitive number',
+    });
   }
 
   if (req.body.seminar < 0 || !Number.isInteger(parseInt(req.body.seminar, 10))) {
-    return res.render('new_course', { message: 'Invalid seminar. The hours of seminars must be a pozitive number.' });
+    return res.status(400).json({
+      success: false,
+      message: 'The hours of seminars must be a pozitive number',
+    });
   }
 
   if (req.body.lab < 0 || !Number.isInteger(parseInt(req.body.lab, 10))) {
-    return res.render('new_course', { message: 'Invalid lab. The hours of laboratory must be a pozitive number.' });
+    return res.status(400).json({
+      success: false,
+      message: 'The hours of labs must be a pozitive number',
+    });
   }
 
   return next();
