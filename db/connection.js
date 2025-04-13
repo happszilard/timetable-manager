@@ -240,8 +240,13 @@ export const getCourseByNumID = (params) => {
 };
 
 export const getUsers = () => {
-  const query = 'SELECT * FROM users';
+  const query = 'SELECT userNumID userID, firstName, lastName, username, userType, allowed FROM users';
   return basicQuery(query);
+};
+
+export const getUserByNumID = (params) => {
+  const query = 'SELECT userNumID userID, firstName, lastName, username, userType, allowed FROM users WHERE userNumID = ?';
+  return basicQuery(query, [params]).then((user) => user[0]);
 };
 
 export const insertCourse = (params) => {
@@ -256,6 +261,20 @@ export const insertCourse = (params) => {
     params.lab,
     params.userNumID,
     params.color,
+  ]);
+};
+
+export const insertUser = (params) => {
+  const query = `INSERT INTO users (userID, firstName, lastName, username, password, userType, allowed)
+  VALUES (?,?,?,?,?,?,?);`;
+  return basicQuery(query, [
+    params.userID,
+    params.firstName,
+    params.lastName,
+    params.username,
+    params.password,
+    params.userType,
+    params.allowed,
   ]);
 };
 
@@ -315,6 +334,11 @@ export const findUserById = (params) => {
   return basicQuery(query, [params]);
 };
 
+export const findUserByUsername = (params) => {
+  const query = 'SELECT username FROM users WHERE username = ?';
+  return basicQuery(query, [params]);
+};
+
 export const findUserByNumID = (params) => {
   const query = 'SELECT userNumID FROM users WHERE userNumID = ?';
   return basicQuery(query, [params]);
@@ -357,6 +381,12 @@ export const setUserAllowed = (params) => {
 
 export const getMaterials = (params) => {
   const query = `SELECT materials.materialID, materials.name, materials.path, materials.pathName from materials
+  join coursematerials on materials.materialID = coursematerials.materialID where courseNumID = ?`;
+  return basicQuery(query, [params]);
+};
+
+export const getMaterialNames = (params) => {
+  const query = `SELECT materials.materialID, materials.name from materials
   join coursematerials on materials.materialID = coursematerials.materialID where courseNumID = ?`;
   return basicQuery(query, [params]);
 };

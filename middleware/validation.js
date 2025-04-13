@@ -1,3 +1,4 @@
+import path from 'path';
 import * as db from '../db/connection.js';
 
 // Course validation - unique ID, valid class
@@ -46,18 +47,42 @@ export const newCourseHoursValidation = (req, res, next) => {
   return next();
 };
 
-// file upload validation - empty upload
-export const uploadValidation = async (req, res, next) => {
-  if (!req.files.courseFile.name) {
-    const [course, materials] = await Promise.all([db.getCourseByNumID(req.params.courseNumId),
-      db.getMaterials(req.params.courseNumId)]);
-    return res.render('course_details', {
-      course,
-      materials,
-      error: 'Please select a file',
-      success: '',
+// User validation
+export const newUsernameValidation = (req, res, next) => {
+  const username = db.findUserByUsername(req.body.username);
+  if (username.length !== 0) {
+    return res.status(409).json({
+      success: false,
+      message: 'username already exists',
     });
   }
+
+  return next();
+};
+
+// file upload validation
+export const uploadValidation = async (req, res, next) => {
+  const file = req.files ? req.files.material : undefined;
+
+  if (!file) {
+    return res.status(400).json({ success: false, message: 'No file uploaded.' });
+  }
+
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (file.size > maxSize) {
+    return res.status(400).json({ success: false, message: 'File is too large (max 5MB).' });
+  }
+
+  const allowedExtensions = ['.pdf', '.docx', '.pptx', '.txt'];
+  const fileExt = path.extname(file.name).toLowerCase();
+
+  if (!allowedExtensions.includes(fileExt)) {
+    return res.status(400).json({
+      success: false,
+      message: `Invalid file type. Allowed types: ${allowedExtensions.join(', ')}.`,
+    });
+  }
+
   return next();
 };
 
@@ -166,7 +191,7 @@ export const maintainCoursesOccupied = async (req, res, next) => {
 // suggestion validation - bad request
 export const badSuggestion = async (req, res, next) => {
   let error = '';
-  const insrtCourse = req.body.insertCourse;
+  const { insertCourse } = req.body;
   const checkCourseNumID = await db.getCalendarCourseNumID({
     dayID: req.body.dayselect,
     timeID: req.body.hourselect,
@@ -177,9 +202,9 @@ export const badSuggestion = async (req, res, next) => {
     timeID: req.body.hourselect,
   });
 
-  if (checkOccupied && insrtCourse === 'insert') {
+  if (checkOccupied && insertCourse === 'insert') {
     error = 'The selected time is occupied';
-  } else if (!checkOccupied && insrtCourse === 'remove') {
+  } else if (!checkOccupied && insertCourse === 'remove') {
     error = 'Nothing to be removed';
   } else if (checkCourseNumID
     && checkCourseNumID.courseNumID !== parseInt(req.body.courseselect, 10)) {
@@ -187,56 +212,26 @@ export const badSuggestion = async (req, res, next) => {
   }
 
   if (error !== '') {
-    const [courses, days, hours, suggestions] = await Promise.all(
-      [db.getUserCourses(res.locals.payload.userNumID), db.getDays(),
-        db.getHours(), db.getUserSuggestions(res.locals.payload.userNumID)],
-    );
-
-    return res.render('suggestion', {
-      courses,
-      days,
-      hours,
-      suggestions,
-      error,
-      success: '',
+    return res.status(400).json({
+      success: false,
+      message: error,
     });
   }
 
   return next();
 };
 
-// suggestion validation - bad request - no permission
+// suggestion validation - no permission
 export const noPremissionSuggestion = async (req, res, next) => {
-  let error = '';
-
-  const checkOccupied = await db.getCalendarCourseNumID({
-    dayID: req.body.dayselect,
-    timeID: req.body.hourselect,
+  const checkMembership = await db.findUserMember({
+    course: req.body.courseNumID,
+    user: req.user.userNumID,
   });
 
-  if (checkOccupied) {
-    const checkMembership = await db.findUserMember({
-      course: checkOccupied.courseNumID,
-      user: res.locals.payload.userNumID,
-    });
-    if (checkMembership.length === 0) {
-      error = 'You don\'t have permission!';
-    }
-  }
-
-  if (error !== '') {
-    const [courses, days, hours, suggestions] = await Promise.all(
-      [db.getUserCourses(res.locals.payload.userNumID), db.getDays(),
-        db.getHours(), db.getUserSuggestions(res.locals.payload.userNumID)],
-    );
-
-    return res.render('suggestion', {
-      courses,
-      days,
-      hours,
-      suggestions,
-      error,
-      success: '',
+  if (checkMembership.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'You do not have permission',
     });
   }
 
