@@ -351,7 +351,7 @@ router.get('/users', onlyAdmins, async (req, res) => {
     const users = await db.getUsers();
     return res.status(200).json({ success: true, data: users });
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'Error fetching suggestions' });
+    return res.status(500).json({ success: false, message: 'Error fetching users' });
   }
 });
 
@@ -364,7 +364,7 @@ router.get('/users/me', async (req, res) => {
 
     return res.status(200).json({ success: true, data: currentUser });
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'Error fetching suggestions' });
+    return res.status(500).json({ success: false, message: 'Error fetching user' });
   }
 });
 
